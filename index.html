@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shopping List</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Shopping List</h1>
+
+    <form id="add-form">
+      <label for="item-input" class="visually-hidden">New item</label>
+      <input id="item-input" type="text" placeholder="Add an item…" autocomplete="off" required>
+      <button type="submit">Add</button>
+    </form>
+
+    <p id="summary" class="summary" aria-live="polite"></p>
+    <ul id="list"></ul>
+    <p id="empty" class="empty" hidden>Your list is empty.</p>
+
+    <button id="clear-checked" type="button" class="secondary">Clear checked items</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
