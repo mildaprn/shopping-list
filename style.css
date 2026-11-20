@@ -1,3 +1,15 @@
+:root {
+  --ink: #1a1033;
+  --cream: #ece6d4;
+  --cream-dark: #d9d2bb;
+  --page: #f7f7f5;
+  --pill: #232323;
+  --purple: #8b3dff;
+  --yellow: #ffc933;
+  --blue: #1d4f9c;
+  --muted: #6f6a5a;
+}
+
 * { box-sizing: border-box; }
 
 body {
@@ -7,77 +19,126 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 2rem 1rem;
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  background: #f3f4f6;
-  color: #1f2937;
+  font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background-color: var(--page);
+  background-image:
+    linear-gradient(#ebebe7 1px, transparent 1px),
+    linear-gradient(90deg, #ebebe7 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 .card {
   width: 100%;
-  max-width: 28rem;
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 30rem;
+  padding: 2rem 1.5rem 1.75rem;
+  background: var(--cream);
+  border: 6px solid #fff;
+  border-radius: 28px;
+  box-shadow: 0 6px 24px rgba(26, 16, 51, 0.12);
 }
 
-h1 { margin: 0 0 1rem; font-size: 1.5rem; }
+h1 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(2.4rem, 11vw, 3.4rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-align: center;
+}
+
+h1::after {
+  content: "";
+  display: block;
+  width: 5rem;
+  height: 6px;
+  margin: 1rem auto 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--purple), var(--yellow));
+}
 
 #add-form { display: flex; gap: 0.5rem; }
 
 input[type="text"] {
   flex: 1;
-  padding: 0.6rem 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  min-width: 0;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--pill);
+  border-radius: 999px;
 }
+input[type="text"]::placeholder { color: #9a9486; }
 
 button {
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  background: #2563eb;
+  padding: 0.7rem 1.25rem;
+  font: inherit;
+  font-weight: 600;
   color: #fff;
+  background: var(--pill);
+  border: 2px solid var(--pill);
+  border-radius: 999px;
   cursor: pointer;
 }
-button:hover { background: #1d4ed8; }
+button:hover { background: #000; }
 
 button.secondary {
-  margin-top: 1rem;
-  background: #e5e7eb;
-  color: #1f2937;
+  display: block;
+  margin: 1.25rem auto 0;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: #fff;
+  border-color: var(--pill);
 }
-button.secondary:hover { background: #d1d5db; }
+button.secondary:hover { background: var(--cream-dark); }
 
-:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--purple); outline-offset: 2px; }
 
-.summary { margin: 1rem 0 0.5rem; font-size: 0.9rem; color: #6b7280; }
-.empty { color: #6b7280; text-align: center; }
+.summary {
+  width: fit-content;
+  margin: 1.25rem auto 0.75rem;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #fff;
+  border: 1px solid var(--cream-dark);
+  border-radius: 999px;
+}
+.summary:empty { display: none; }
+
+.empty { margin: 1.5rem 0 0; color: var(--muted); text-align: center; }
 
 ul { list-style: none; margin: 0; padding: 0; }
 
 li {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: #fff;
+  border-radius: 14px;
 }
 
-li input[type="checkbox"] { width: 1.15rem; height: 1.15rem; }
-li label { flex: 1; word-break: break-word; cursor: pointer; }
-li.done label { text-decoration: line-through; color: #9ca3af; }
+li input[type="checkbox"] {
+  width: 1.3rem;
+  height: 1.3rem;
+  accent-color: var(--purple);
+}
+li label { flex: 1; font-weight: 500; word-break: break-word; cursor: pointer; }
+li.done label { text-decoration: line-through; color: #a39d8c; }
 
 li button.delete {
-  padding: 0.2rem 0.55rem;
+  padding: 0.15rem 0.6rem;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  color: var(--muted);
   background: transparent;
-  color: #9ca3af;
-  font-size: 1.2rem;
-  line-height: 1;
+  border-color: transparent;
 }
-li button.delete:hover { background: #fee2e2; color: #b91c1c; }
+li button.delete:hover { background: #fde2e2; color: #b91c1c; }
 
 .visually-hidden {
   position: absolute;
