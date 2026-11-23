@@ -30,7 +30,7 @@ body {
 
 .card {
   width: 100%;
-  max-width: 30rem;
+  max-width: 62rem;
   padding: 2rem 1.5rem 1.75rem;
   background: var(--cream);
   border: 6px solid #fff;
@@ -121,6 +121,47 @@ li {
   background: #fff;
   border-radius: 14px;
 }
+
+/* Board: one column per category, columns wrap on narrow screens. */
+#list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+section {
+  padding: 0.75rem;
+  background: var(--cream-dark);
+  border-radius: 18px;
+}
+
+h2 {
+  margin: 0.1rem 0 0.25rem 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+section.empty-column { display: none; }
+#list.dragging section.empty-column { display: block; }
+section.over { outline: 3px dashed var(--purple); outline-offset: -3px; }
+section ul:empty { min-height: 2.5rem; }
+
+li[draggable="true"] { cursor: grab; }
+li:active { cursor: grabbing; }
+
+button.add-column {
+  padding: 0.75rem;
+  color: var(--muted);
+  background: transparent;
+  border: 2px dashed var(--cream-dark);
+  border-radius: 18px;
+}
+button.add-column:hover { color: var(--ink); background: var(--cream-dark); }
 
 li input[type="checkbox"] {
   width: 1.3rem;
