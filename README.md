@@ -48,7 +48,7 @@ Data stays in the browser on one device. It is not shared between devices or bro
 No installs and no API keys are needed.
 
 - Locally: open `index.html` in a browser.
-- On GitHub Pages: push the project to GitHub and enable Pages in the repository settings, with the folder that contains `index.html` as the source. The live page is at https://mildaprn.github.io/shopping-list/. Browsers cache files for about 10 minutes, so after an update do a hard refresh to see the new version.
+- On GitHub Pages: push the project to GitHub and enable Pages in the repository settings, with the folder that contains `index.html` as the source. The live page is at https://mildaprn.github.io/shopping-list/. Browsers cache files for about 10 minutes, so `index.html` links the files as `style.css?v=2` and `script.js?v=2`. When you change `style.css` or `script.js`, raise that number in `index.html` so browsers fetch the new file instead of an old copy.
 
 ## How AI was used
 
