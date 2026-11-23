@@ -9,10 +9,18 @@ const KEYWORDS = {
   "Fruit & Veg": ["apple", "banana", "orange", "lemon", "lime", "grape", "berry", "strawberry", "tomato", "potato", "onion", "garlic", "carrot", "cucumber", "lettuce", "salad", "spinach", "pepper", "broccoli", "avocado", "mushroom", "fruit", "vegetable"],
   Dairy: ["milk", "cheese", "butter", "yogurt", "yoghurt", "cream", "egg", "kefir"],
   "Meat & Fish": ["chicken", "beef", "pork", "ham", "bacon", "sausage", "turkey", "fish", "salmon", "tuna", "shrimp", "meat"],
+  // Household comes before Bakery so "toilet roll" is not caught by "roll".
+  Household: ["soap", "shampoo", "detergent", "toothpaste", "tissue", "toilet", "sponge", "foil"],
   Bakery: ["bread", "bun", "roll", "baguette", "croissant", "cake", "bagel", "toast"],
   Pantry: ["rice", "pasta", "flour", "sugar", "salt", "oil", "cereal", "oats", "beans", "lentil", "sauce", "honey", "jam", "coffee", "tea", "spice", "chocolate", "biscuit", "cookie", "crisp", "snack"],
   Drinks: ["water", "juice", "soda", "cola", "beer", "wine"],
-  Household: ["soap", "shampoo", "detergent", "toothpaste", "tissue", "toilet", "sponge", "foil"],
+};
+
+// Two-word names that a single keyword would put in the wrong place. Checked first.
+const PHRASES = {
+  "black pepper": "Pantry",
+  "peanut butter": "Pantry",
+  "ice cream": OTHER,
 };
 
 const form = document.getElementById("add-form");
@@ -25,7 +33,9 @@ const clearBtn = document.getElementById("clear-checked");
 function load(key, fallback) {
   try {
     const data = JSON.parse(localStorage.getItem(key));
-    return data && typeof data === typeof fallback ? data : fallback;
+    // Arrays and plain objects are both typeof "object", so check for arrays explicitly.
+    const ok = data && typeof data === typeof fallback && Array.isArray(data) === Array.isArray(fallback);
+    return ok ? data : fallback;
   } catch {
     return fallback;
   }
@@ -56,7 +66,11 @@ function allCategories() {
 
 function guessCategory(text) {
   const name = text.trim().toLowerCase();
-  if (learned[name]) return learned[name];
+  // hasOwn: a plain object also "has" inherited names like "constructor".
+  if (Object.hasOwn(learned, name)) return learned[name];
+  for (const [phrase, category] of Object.entries(PHRASES)) {
+    if (name.includes(phrase)) return category;
+  }
   // Match each word as typed, and without a plural ending ("apples", "tomatoes").
   const words = name.split(/[^a-z]+/).flatMap((w) => [w, w.replace(/s$/, ""), w.replace(/es$/, "")]);
   for (const [category, keywords] of Object.entries(KEYWORDS)) {
