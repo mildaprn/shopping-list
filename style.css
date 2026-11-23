@@ -93,6 +93,7 @@ button.secondary {
   border-color: var(--pill);
 }
 button.secondary:hover { background: var(--cream-dark); }
+button.secondary[hidden] { display: none; }
 
 :focus-visible { outline: 3px solid var(--purple); outline-offset: 2px; }
 

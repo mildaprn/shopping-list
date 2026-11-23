@@ -28,8 +28,8 @@ const input = document.getElementById("item-input");
 const listEl = document.getElementById("list");
 const emptyEl = document.getElementById("empty");
 const summaryEl = document.getElementById("summary");
-const clearBtn = document.getElementById("clear-checked");
 const filtersEl = document.getElementById("filters");
+const clearAllBtn = document.getElementById("clear-all");
 
 let filter = "all"; // "all", "active" (not ticked) or "completed" (ticked)
 const EMPTY_TEXT = {
@@ -204,18 +204,20 @@ function render() {
   newColumn.addEventListener("click", addCategory);
   listEl.append(newColumn);
 
-  const doneCount = items.filter((i) => i.done).length;
-  const shownCount = items.filter(matchesFilter).length;
+  if (items.length === 0) filter = "all"; // nothing to filter, so show the plain empty message
+  const shown = items.filter(matchesFilter);
+  const shownCount = shown.length;
+  const doneCount = shown.filter((i) => i.done).length;
   emptyEl.hidden = shownCount > 0;
   emptyEl.textContent = EMPTY_TEXT[filter];
   filtersEl.hidden = items.length === 0;
   for (const button of filtersEl.querySelectorAll("button")) {
     button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
   }
-  summaryEl.textContent = items.length
-    ? doneCount + " of " + items.length + " checked"
+  summaryEl.textContent = shownCount
+    ? doneCount + " of " + shownCount + " checked"
     : "";
-  clearBtn.hidden = doneCount === 0;
+  clearAllBtn.hidden = filter !== "completed" || shownCount === 0;
 }
 
 form.addEventListener("submit", (event) => {
@@ -229,6 +231,7 @@ form.addEventListener("submit", (event) => {
     category: guessCategory(text),
   });
   input.value = "";
+  filter = "all"; // otherwise a new unticked item could be hidden by the filter
   save();
   render();
   input.focus();
@@ -241,8 +244,8 @@ filtersEl.addEventListener("click", (event) => {
   render();
 });
 
-clearBtn.addEventListener("click", () => {
-  items = items.filter((i) => !i.done);
+clearAllBtn.addEventListener("click", () => {
+  items = items.filter((i) => !i.done); // only shown on Completed, so this removes the items you see
   save();
   render();
 });
