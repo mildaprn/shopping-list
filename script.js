@@ -28,7 +28,19 @@ const input = document.getElementById("item-input");
 const listEl = document.getElementById("list");
 const emptyEl = document.getElementById("empty");
 const summaryEl = document.getElementById("summary");
-const clearBtn = document.getElementById("clear-checked");
+const filtersEl = document.getElementById("filters");
+const clearAllBtn = document.getElementById("clear-all");
+
+let filter = "all"; // "all", "active" (not ticked) or "completed" (ticked)
+const EMPTY_TEXT = {
+  all: "Your list is empty.",
+  active: "Nothing left to buy!",
+  completed: "No completed items.",
+};
+
+function matchesFilter(item) {
+  return filter === "all" || (filter === "completed") === item.done;
+}
 
 function load(key, fallback) {
   try {
@@ -156,7 +168,7 @@ function render() {
   listEl.replaceChildren();
 
   for (const category of allCategories()) {
-    const group = items.filter((i) => i.category === category);
+    const group = items.filter((i) => i.category === category && matchesFilter(i));
 
     const section = document.createElement("section");
     // Empty starter columns only show while dragging; your own columns always show.
@@ -192,12 +204,20 @@ function render() {
   newColumn.addEventListener("click", addCategory);
   listEl.append(newColumn);
 
-  const doneCount = items.filter((i) => i.done).length;
-  emptyEl.hidden = items.length > 0;
-  summaryEl.textContent = items.length
-    ? doneCount + " of " + items.length + " checked"
+  if (items.length === 0) filter = "all"; // nothing to filter, so show the plain empty message
+  const shown = items.filter(matchesFilter);
+  const shownCount = shown.length;
+  const doneCount = shown.filter((i) => i.done).length;
+  emptyEl.hidden = shownCount > 0;
+  emptyEl.textContent = EMPTY_TEXT[filter];
+  filtersEl.hidden = items.length === 0;
+  for (const button of filtersEl.querySelectorAll("button")) {
+    button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+  }
+  summaryEl.textContent = shownCount
+    ? doneCount + " of " + shownCount + " checked"
     : "";
-  clearBtn.hidden = doneCount === 0;
+  clearAllBtn.hidden = filter !== "completed" || shownCount === 0;
 }
 
 form.addEventListener("submit", (event) => {
@@ -211,13 +231,21 @@ form.addEventListener("submit", (event) => {
     category: guessCategory(text),
   });
   input.value = "";
+  filter = "all"; // otherwise a new unticked item could be hidden by the filter
   save();
   render();
   input.focus();
 });
 
-clearBtn.addEventListener("click", () => {
-  items = items.filter((i) => !i.done);
+filtersEl.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  filter = button.dataset.filter;
+  render();
+});
+
+clearAllBtn.addEventListener("click", () => {
+  items = items.filter((i) => !i.done); // only shown on Completed, so this removes the items you see
   save();
   render();
 });

@@ -17,10 +17,15 @@
     </form>
 
     <p id="summary" class="summary" aria-live="polite"></p>
+    <div id="filters" class="filters" role="group" aria-label="Show items" hidden>
+      <button type="button" data-filter="all">All</button>
+      <button type="button" data-filter="active">Active</button>
+      <button type="button" data-filter="completed">Completed</button>
+    </div>
     <div id="list"></div>
     <p id="empty" class="empty" hidden>Your list is empty.</p>
 
-    <button id="clear-checked" type="button" class="secondary">Clear checked items</button>
+    <button id="clear-all" type="button" class="secondary" hidden>Clear completed items</button>
   </main>
 
   <script src="script.js"></script>
