@@ -23,6 +23,7 @@ Features:
 - Delete an item
 - Clear all ticked items
 - A counter showing how many items are checked
+- Filter: the All / Active / Completed buttons above the board show every item, only items not yet ticked, or only ticked items. The choice is not saved, so the page starts on All
 - Categories: each item has one category and the list is shown as a board with one column per category (columns wrap onto new rows on narrow screens). A new item gets a category automatically, and you move it by dragging it into another column. The "+ New category" button at the end of the board makes your own column. While you drag, empty starter columns appear so you can drop into them
 
 Look and feel: a cream card with a thick white border on an off-white grid background, a large bold title, pill-shaped buttons and white rounded list rows. The style follows a reference image I supplied. There is no illustration, because the app is limited to three files.

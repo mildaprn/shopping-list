@@ -29,6 +29,18 @@ const listEl = document.getElementById("list");
 const emptyEl = document.getElementById("empty");
 const summaryEl = document.getElementById("summary");
 const clearBtn = document.getElementById("clear-checked");
+const filtersEl = document.getElementById("filters");
+
+let filter = "all"; // "all", "active" (not ticked) or "completed" (ticked)
+const EMPTY_TEXT = {
+  all: "Your list is empty.",
+  active: "Nothing left to buy!",
+  completed: "No completed items.",
+};
+
+function matchesFilter(item) {
+  return filter === "all" || (filter === "completed") === item.done;
+}
 
 function load(key, fallback) {
   try {
@@ -156,7 +168,7 @@ function render() {
   listEl.replaceChildren();
 
   for (const category of allCategories()) {
-    const group = items.filter((i) => i.category === category);
+    const group = items.filter((i) => i.category === category && matchesFilter(i));
 
     const section = document.createElement("section");
     // Empty starter columns only show while dragging; your own columns always show.
@@ -193,7 +205,13 @@ function render() {
   listEl.append(newColumn);
 
   const doneCount = items.filter((i) => i.done).length;
-  emptyEl.hidden = items.length > 0;
+  const shownCount = items.filter(matchesFilter).length;
+  emptyEl.hidden = shownCount > 0;
+  emptyEl.textContent = EMPTY_TEXT[filter];
+  filtersEl.hidden = items.length === 0;
+  for (const button of filtersEl.querySelectorAll("button")) {
+    button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+  }
   summaryEl.textContent = items.length
     ? doneCount + " of " + items.length + " checked"
     : "";
@@ -214,6 +232,13 @@ form.addEventListener("submit", (event) => {
   save();
   render();
   input.focus();
+});
+
+filtersEl.addEventListener("click", (event) => {
+  const button = event.target.closest("button");
+  if (!button) return;
+  filter = button.dataset.filter;
+  render();
 });
 
 clearBtn.addEventListener("click", () => {

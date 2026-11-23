@@ -108,6 +108,18 @@ button.secondary:hover { background: var(--cream-dark); }
 }
 .summary:empty { display: none; }
 
+.filters { display: flex; justify-content: center; gap: 0.4rem; }
+.filters[hidden] { display: none; }
+.filters button {
+  padding: 0.35rem 1rem;
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: #fff;
+  border-color: var(--cream-dark);
+}
+.filters button:hover { background: var(--cream-dark); }
+.filters button[aria-pressed="true"] { color: #fff; background: var(--pill); border-color: var(--pill); }
+
 .empty { margin: 1.5rem 0 0; color: var(--muted); text-align: center; }
 
 ul { list-style: none; margin: 0; padding: 0; }
